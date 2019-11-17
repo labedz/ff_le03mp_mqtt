@@ -1,0 +1,211 @@
+---
+bound:
+  -
+    index:
+      - 20
+      - 21
+    div: 100
+    config_topic: "homeassistant/sensor/le03mp_kwh/config"
+    state_topic: "homeassistant/sensor/le03mp_bound/state"
+    value_key: power_consumed
+    value_template: "{{ value_json.power_consumed}}"
+    unit: kWh
+    device_class: power
+    name: "Power consumed"
+  - 
+    index:
+      - 22
+      - 23
+    div: 100
+    config_topic: "homeassistant/sensor/le03mp_kvarh/config"
+    state_topic: "homeassistant/sensor/le03mp_bound/state"
+    value_key: reactive_power_consumed
+    value_template: "{{ value_json.reactive_power_consumed}}"
+    unit: kvarh
+    device_class: reactive_power
+    name: "Reactive power consumed"
+voltage: 
+  -
+    index: 1
+    div: 100
+    config_topic: "homeassistant/sensor/le03mp_v_l1/config"
+    state_topic: "homeassistant/sensor/le03mp_voltage/state"
+    value_key: l1_voltage
+    value_template: "{{ value_json.l1_voltage}}"
+    unit: V
+    device_class: voltage
+    name: "l1 Voltage"
+  -
+    index: 2
+    div: 100
+    config_topic: "homeassistant/sensor/le03mp_v_l2/config"
+    state_topic: "homeassistant/sensor/le03mp_voltage/state"
+    value_key: l2_voltage
+    value_template: "{{ value_json.l2_voltage}}"
+    unit: V
+    device_class: voltage
+    name: "l2 Voltage"
+  -
+    index: 3
+    div: 100
+    config_topic: "homeassistant/sensor/le03mp_v_l3/config"
+    state_topic: "homeassistant/sensor/le03mp_voltage/state"
+    value_key: l3_voltage
+    value_template: "{{ value_json.l3_voltage}}"
+    unit: V
+    device_class: voltage
+    name: "l3 Voltage"
+current:
+  -
+    index: 4
+    div: 100
+    config_topic: "homeassistant/sensor/le03mp_A_l1/config"
+    state_topic: "homeassistant/sensor/le03mp_current/state"
+    value_key: l1_current
+    value_template: "{{ value_json.l1_current}}"
+    unit: A
+    device_class: current
+    name: "l1 Current"
+  -
+    index: 5
+    div: 100
+    config_topic: "homeassistant/sensor/le03mp_A_l2/config"
+    state_topic: "homeassistant/sensor/le03mp_current/state"
+    value_key: l2_current
+    value_template: "{{ value_json.l2_current}}"
+    unit: A
+    device_class: current
+    name: "l2 Current"
+  -
+    index: 6
+    div: 100
+    config_topic: "homeassistant/sensor/le03mp_A_l3/config"
+    state_topic: "homeassistant/sensor/le03mp_current/state"
+    value_key: l3_current
+    value_template: "{{ value_json.l3_current}}"
+    unit: A
+    device_class: current
+    name: "l3 Current"
+power:
+  -
+    index: 7
+    div: 1000
+    config_topic: "homeassistant/sensor/le03mp_kw_l1/config"
+    state_topic: "homeassistant/sensor/le03mp_power/state"
+    value_key: l1_power
+    value_template: "{{ value_json.l1_power}}"
+    unit: kW
+    device_class: power
+    name: "l1 Power"
+  -
+    index: 8
+    div: 1000
+    config_topic: "homeassistant/sensor/le03mp_kw_l2/config"
+    state_topic: "homeassistant/sensor/le03mp_power/state"
+    value_key: l2_power
+    value_template: "{{ value_json.l2_power}}"
+    unit: kW
+    device_class: power
+    name: "l2 Power"
+  -
+    index: 9
+    div: 1000
+    config_topic: "homeassistant/sensor/le03mp_kw_l3/config"
+    state_topic: "homeassistant/sensor/le03mp_power/state"
+    value_key: l3_power
+    value_template: "{{ value_json.l3_power}}"
+    unit: kW
+    device_class: power
+    name: "l3 Power"
+  -
+    index: 10
+    div: 1000
+    config_topic: "homeassistant/sensor/le03mp_kw/config"
+    state_topic: "homeassistant/sensor/le03mp_power/state"
+    value_key: power
+    value_template: "{{ value_json.power}}"
+    unit: kW
+    device_class: power
+    name: "Sum Power"
+  -
+    index: 24
+    div: 1000
+    config_topic: "homeassistant/sensor/le03mp_kvar_l1/config"
+    state_topic: "homeassistant/sensor/le03mp_power/state"
+    value_key: l1_reactive_power
+    value_template: "{{ value_json.l1_reactive_power}}"
+    unit: kvar
+    device_class: reactive_power
+    name: "l1 reactive power"
+  -
+    index: 25
+    div: 1000
+    config_topic: "homeassistant/sensor/le03mp_kvar_l2/config"
+    state_topic: "homeassistant/sensor/le03mp_power/state"
+    value_key: l2_reactive_power
+    value_template: "{{ value_json.l2_reactive_power}}"
+    unit: kvar
+    device_class: reactive_power
+    name: "l2 reactive power"
+  -
+    index: 26
+    div: 1000
+    config_topic: "homeassistant/sensor/le03mp_kvar_l3/config"
+    state_topic: "homeassistant/sensor/le03mp_power/state"
+    value_key: l3_reactive_power
+    value_template: "{{ value_json.l3_reactive_power}}"
+    unit: kvar
+    device_class: reactive_power
+    name: "l4 reactive power"
+  -
+    index: 27
+    div: 1000
+    config_topic: "homeassistant/sensor/le03mp_kvaar/config"
+    state_topic: "homeassistant/sensor/le03mp_power/state"
+    value_key: reactive_power
+    value_template: "{{ value_json.reactive_power}}"
+    unit: kvar
+    device_class: power
+    name: "Reactive power"
+misc:
+  -
+    index: 15
+    div: 100
+    config_topic: "homeassistant/sensor/le03mp_hz/config"
+    state_topic: "homeassistant/sensor/le03mp_misc/state"
+    value_key: freq
+    value_template: "{{ value_json.freq}}"
+    unit: Hz
+    device_class: frequency
+    name: Frequency
+  -
+    index: 30
+    div: 1000
+    config_topic: "homeassistant/sensor/le03mp_l1_cosa/config"
+    state_topic: "homeassistant/sensor/le03mp_misc/state"
+    value_key: l1_cosa
+    value_template: "{{ value_json.l1_cosa}}"
+    unit: unit
+    device_class: power
+    name: "l1 power factor"
+  -
+    index: 31
+    div: 1000
+    config_topic: "homeassistant/sensor/le03mp_l2_cosa/config"
+    state_topic: "homeassistant/sensor/le03mp_misc/state"
+    value_key: l2_cosa
+    value_template: "{{ value_json.l2_cosa}}"
+    unit: unit
+    device_class: power
+    name: "l2 power factor"
+  -
+    index: 32
+    div: 1000
+    config_topic: "homeassistant/sensor/le03mp_l3_cosa/config"
+    state_topic: "homeassistant/sensor/le03mp_misc/state"
+    value_key: l3_cosa
+    value_template: "{{ value_json.l3_cosa}}"
+    unit: unit
+    device_class: power
+    name: "l3 power factor"
+
