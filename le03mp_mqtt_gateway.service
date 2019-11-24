@@ -1,0 +1,6 @@
+[Unit]
+Description=MQTT gateway for FF LE03MP energy metter
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/local/bin/ff_le03mp_mqtt.py /usr/local/etc/ff_le03mp_mqtt.ini
