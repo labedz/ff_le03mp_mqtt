@@ -17,6 +17,8 @@ def mqtt_on_message(client, userdata, message):
 
 
 def mqtt_connect():
+    logging.debug("Connecting to mqtt server %s:%s as %s" %
+        (Config['mqtt']['host'], Config['mqtt']['port'], Config['mqtt']['client_name']))
     mqtt_client = mqtt.Client(Config['mqtt']['client_name'])
     mqtt_client.username_pw_set(Config['mqtt']['username'], Config['mqtt']['password'])
     mqtt_client.on_message = mqtt_on_message
@@ -24,6 +26,7 @@ def mqtt_connect():
     return mqtt_client
 
 def load_registers_description():
+    registers = None
     with open(Config['default']['register_file'], 'r') as stream:
         try:
             registers = yaml.safe_load(stream)
@@ -171,7 +174,7 @@ def main():
     modbus_client = ModbusClient(method="rtu", port=Config['modbus']['port'], timeout=2, stopbits=2, bytesize=8,  parity="N", baudrate=9600)
     modbus_client.connect()
 
-    register = load_registers_description()
+    registers = load_registers_description()
     mqtt_client = mqtt_connect()
 
     register_services(registers=registers, mqtt_client=mqtt_client)
