@@ -16,10 +16,11 @@ def mqtt_on_message(client, userdata, message):
         + message.topic + " with QoS " + str(message.qos))
 
 
-def mqtt_connect():
-    logging.debug("Connecting to mqtt server %s:%s as %s" %
+def mqtt_connect(logger):
+    logging.info("Connecting to mqtt server %s:%s as %s" %
         (Config['mqtt']['host'], Config['mqtt']['port'], Config['mqtt']['client_name']))
     mqtt_client = mqtt.Client(Config['mqtt']['client_name'])
+    mqtt_client.enable_logger(logger=logger)
     mqtt_client.username_pw_set(Config['mqtt']['username'], Config['mqtt']['password'])
     mqtt_client.on_message = mqtt_on_message
     mqtt_client.connect(Config['mqtt']['host'], int(Config['mqtt']['port']))
@@ -49,13 +50,14 @@ def get_register(index, modbus_client):
     raise ValueError('Error while reading MODBUS message')
 
 def get_registers(registers, modbus_client):
-    logging.debug("Fetching register data from metter")
+    logging.info("Fetching register data from metter")
     for type in registers:
         for register in registers[type]:
             if not isinstance(register['index'], list):
                 logging.debug("Reading index %i, name: %s" % (register["index"], register["name"]))
                 try:
                     register['value'] = float(get_register(register['index'], modbus_client))
+                    logging.info("Read sensor '%s' value %f" % (register["name"], register["value"]))
                 except Exception as e:
                     logging.error("Error while reading register: %s" % e)
 
@@ -69,27 +71,35 @@ def get_registers(registers, modbus_client):
                     logging.error("Error while reading register")
 
                 register["value"] = float(value1 * 256 ** 2 + value2)
-
+                logging.info("Read sensor '%s' value %f" % (register["name"], register["value"]))
 
 def send_message(mqtt_client, topic, payload):
     logging.debug("Sending: topic: %s, payload: %s" % (topic, payload))
-    mqtt_client.publish(topic, json.dumps(payload))
+    result, mid = mqtt_client.publish(topic, json.dumps(payload))
+    if result == mqtt.MQTT_ERR_SUCCESS:
+        return
+
+    raise ValueError("Error while sending MQTT message, status %i" % result)
 #    mqtt_client.publish(topic, "")
 
 def register_services(registers=None, mqtt_client=None):
     logging.info("Registering services")
     for type in registers:
         for register in registers[type]:
-            send_message(
-                    mqtt_client = mqtt_client,
-                    topic = register["config_topic"],
-                    payload = {
-                        "name": register["name"],
-                        "state_topic": register["state_topic"],
-                        "unit_of_measurement": register["unit"],
-                        "value_template": register["value_template"]
-                        }
-                    )
+            logging.info("Registering sensor '%s'" % register["name"])
+            try:
+                send_message(
+                        mqtt_client = mqtt_client,
+                        topic = register["config_topic"],
+                        payload = {
+                            "name": register["name"],
+                            "state_topic": register["state_topic"],
+                            "unit_of_measurement": register["unit"],
+                            "value_template": register["value_template"]
+                            }
+                        )
+            except Exception as e:
+                logging.critical(e)
 
 def send_values(mqtt_client, registers):
     messages = []
@@ -100,11 +110,15 @@ def send_values(mqtt_client, registers):
         for register in registers[type]:
             msg.update({register["value_key"]:  float(register["value"] / register["div"])})
 
-        send_message(
-                mqtt_client = mqtt_client,
-                topic = register["state_topic"],
-                payload = msg
-        )
+        logging.info("Sending sensors state: '%s'" % json.dumps(msg))
+        try:
+            send_message(
+                    mqtt_client = mqtt_client,
+                    topic = register["state_topic"],
+                    payload = msg
+            )
+        except Exception as e:
+            logging.critical(e)
 
 class ProgramKilled(Exception):
     pass
@@ -175,7 +189,7 @@ def main():
     modbus_client.connect()
 
     registers = load_registers_description()
-    mqtt_client = mqtt_connect()
+    mqtt_client = mqtt_connect(logger)
 
     register_services(registers=registers, mqtt_client=mqtt_client)
 
