@@ -4,3 +4,6 @@ After=multi-user.target
 
 [Service]
 ExecStart=/usr/local/bin/ff_le03mp_mqtt.py /usr/local/etc/ff_le03mp_mqtt.ini
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
