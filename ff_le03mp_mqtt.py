@@ -79,8 +79,16 @@ def send_message(mqtt_client, topic, payload):
     if result == mqtt.MQTT_ERR_SUCCESS:
         return
 
+    logging.info("Error while sending MQTT message, status %i. Retrying..." % result)
+    logging.warning("Reconnecting to MQTT")
+    mqtt_client.reconnect()
+
+    logging.debug("Sending: topic: %s, payload: %s" % (topic, payload))
+    result, mid = mqtt_client.publish(topic, json.dumps(payload))
+    if result == mqtt.MQTT_ERR_SUCCESS:
+        return
+
     raise ValueError("Error while sending MQTT message, status %i" % result)
-#    mqtt_client.publish(topic, "")
 
 def register_services(registers=None, mqtt_client=None):
     logging.info("Registering services")
